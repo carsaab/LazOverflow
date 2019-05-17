@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "408964026485",
+    "firebase_url": "https://snackingatoz.firebaseio.com",
+    "project_id": "snackingatoz",
+    "storage_bucket": "snackingatoz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408964026485:android:8e3ecc57ab3ced41",
+        "android_client_info": {
+          "package_name": "snackingAToZ.learningAToZ"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "408964026485-8cvd6ivtuu12kvkf60jtdom9d7ajkbrb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7UWHxtyhtvDoylZ8wKJukjZfYo-Sk9G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408964026485-8cvd6ivtuu12kvkf60jtdom9d7ajkbrb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "408964026485-i4dnf7r2ja6l847j34nkq08tvdp78in9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.learninga-z.snackingaz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
