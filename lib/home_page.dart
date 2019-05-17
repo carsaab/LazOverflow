@@ -49,13 +49,45 @@ class _HomePageState extends State<HomePage> {
     ),
     Column(
       children: <Widget>[
-        Text(
-          'NOMINATIONS',
-          style: TextStyle(
-              fontWeight: FontWeight.bold
+        FractionallySizedBox(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: Firestore.instance.collection('requestItem').snapshots(),
+            builder: (context, snapshot) {
+              if(!snapshot.hasData){
+                return const Text('Loading...');
+              }
+              return ListView.builder(
+                  itemExtent: 80.00,
+                  itemCount: snapshot.data.documents.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final document = snapshot.data.documents[index];
+                    final upVotes = document['nominationCount'] ?? 0;
+                    debugPrint(upVotes.toString());
+                    return Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () => {
+                              document.reference.updateData({
+                                'nominationCount' : FieldValue.increment(1)
+                              })
+                            },
+
+                          ),
+                          Text(
+                              (upVotes).toString()
+                          ),
+                          Text(
+                              document['name'] ?? "no name provided"
+                          ),
+                        ]
+                    );
+                  }
+              );
+            },
           ),
         ),
-        new Padding(padding: new EdgeInsets.only(top: 10.0)),
         TextFormField(
           decoration: new InputDecoration(
             labelText: "Nominate a New Snack",
