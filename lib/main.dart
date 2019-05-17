@@ -31,7 +31,8 @@ class _MyHomePageState extends State<MyHomePage> {
   static final myController = new TextEditingController();
 
   List<Widget> _widgetOptions = <Widget>[
-        StreamBuilder<QuerySnapshot>(
+      Expanded(
+        child: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection('shoppingItem').snapshots(),
         builder: (context, snapshot) {
           if(!snapshot.hasData){
@@ -47,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         },
       ),
+    ),  
     Column(
       children: <Widget>[
         Text(
