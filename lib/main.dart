@@ -26,6 +26,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  static final FocusNode _nominationsFocus = FocusNode();
   static final myController = new TextEditingController();
 
   List<Widget> _widgetOptions = <Widget>[
@@ -59,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           controller: myController,
+          focusNode: _nominationsFocus,
         ),
         FloatingActionButton(
           // When the user presses the button, show an alert dialog with the
@@ -66,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             debugPrint(myController.text);
             myController.text = '';
+            _nominationsFocus.unfocus();
           },
           tooltip: 'Add Nomination',
           child: Icon(Icons.add_comment),
