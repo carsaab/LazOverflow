@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: Icon(Icons.thumb_up),
                     onPressed: () => {
                       document.reference.updateData({
-                        'currentUpVotes' : upVotes + 1 
+                        'currentUpVotes' : FieldValue.increment(1)
                       })
                     },
 
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: Icon(Icons.thumb_down),
                     onPressed: () => {
                       document.reference.updateData({
-                        'currentDownVotes' : downVotes + 1
+                        'currentDownVotes' : FieldValue.increment(1)
                       })
                     },
                   ),
