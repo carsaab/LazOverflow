@@ -31,19 +31,62 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _widgetOptions = <Widget>[
     Expanded(
-      child: StreamBuilder<QuerySnapshot>(
+        child: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection('shoppingItem').snapshots(),
         builder: (context, snapshot) {
           if(!snapshot.hasData){
             return const Text('Loading...');
           }
+
+          var voteTotalFromDocument = (document){
+            final upVotes = document['currentUpVotes'] ?? 0;
+            final downVotes = document['currentDownVotes'] ?? 0;
+            return upVotes - downVotes;
+          };
+
+          snapshot.data.documents.sort((documentA, documentB) => voteTotalFromDocument(documentB) - voteTotalFromDocument(documentA));
+          final documents = snapshot.data.documents;
+
           return ListView.builder(
-              itemExtent: 80.00,
-              itemCount: snapshot.data.documents.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return new Text(snapshot.data.documents[index]['name'] ?? "no data");
-              }
+            itemExtent: 80.00,
+            itemCount: documents.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final document = documents[index];
+              final upVotes = document['currentUpVotes'] ?? 0;
+              final downVotes = document['currentDownVotes'] ?? 0;
+              debugPrint(upVotes.toString());
+              debugPrint(downVotes.toString());
+              return Row(
+                children: [ 
+                  IconButton(
+                    icon: Icon(Icons.thumb_up),
+                    onPressed: () => {
+                      document.reference.updateData({
+                        'currentUpVotes' : FieldValue.increment(1),
+                        'historicalUpVotes' : FieldValue.increment(1)
+                      })
+                    },
+
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.thumb_down),
+                    onPressed: () => {
+                      document.reference.updateData({
+                        'currentDownVotes' : FieldValue.increment(1),
+                        'hisotricalDownVotes': FieldValue.increment(1)
+                      })
+                    },
+                  ),
+                  Text(
+                    voteTotalFromDocument(document).toString()
+                  ),
+                  Text(
+                    document['name'] ?? "no name provided"
+                  ),
+                ]
+              );
+            }
           );
         },
       ),
