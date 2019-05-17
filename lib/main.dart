@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  
+  static final firestore = Firestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,7 +46,38 @@ class _MyHomePageState extends State<MyHomePage> {
             itemCount: snapshot.data.documents.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return new Text(snapshot.data.documents[index]['name'] ?? "no data");
+              final document = snapshot.data.documents[index];
+              final upVotes = document['currentUpVotes'] ?? 0;
+              final downVotes = document['currentDownVotes'] ?? 0;
+              debugPrint(upVotes.toString());
+              debugPrint(downVotes.toString());
+              return Row(
+                children: [ 
+                  IconButton(
+                    icon: Icon(Icons.thumb_up),
+                    onPressed: () => {
+                      document.reference.updateData({
+                        'currentUpVotes' : upVotes + 1 
+                      })
+                    },
+
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.thumb_down),
+                    onPressed: () => {
+                      document.reference.updateData({
+                        'currentDownVotes' : downVotes + 1
+                      })
+                    },
+                  ),
+                  Text(
+                    (upVotes - downVotes).toString()
+                  ),
+                  Text(
+                    document['name'] ?? "no name provided"
+                  ),
+                ]
+              );
             }
           );
         },
