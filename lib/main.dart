@@ -41,12 +41,22 @@ class _MyHomePageState extends State<MyHomePage> {
           if(!snapshot.hasData){
             return const Text('Loading...');
           }
+
+          var voteTotalFromDocument = (document){
+            final upVotes = document['currentUpVotes'] ?? 0;
+            final downVotes = document['currentDownVotes'] ?? 0;
+            return upVotes - downVotes;
+          };
+
+          snapshot.data.documents.sort((documentA, documentB) => voteTotalFromDocument(documentB) - voteTotalFromDocument(documentA));
+          final documents = snapshot.data.documents;
+
           return ListView.builder(
             itemExtent: 80.00,
-            itemCount: snapshot.data.documents.length,
+            itemCount: documents.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              final document = snapshot.data.documents[index];
+              final document = documents[index];
               final upVotes = document['currentUpVotes'] ?? 0;
               final downVotes = document['currentDownVotes'] ?? 0;
               debugPrint(upVotes.toString());
@@ -73,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                   Text(
-                    (upVotes - downVotes).toString()
+                    voteTotalFromDocument(document).toString()
                   ),
                   Text(
                     document['name'] ?? "no name provided"
