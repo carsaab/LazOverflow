@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static final FocusNode _nominationsFocus = FocusNode();
   static final myController = new TextEditingController();
+  static final db = Firestore.instance;
 
   List<Widget> _widgetOptions = <Widget>[
     Expanded(
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
         ),
         FloatingActionButton(
           onPressed: () {
-            debugPrint(myController.text);
+            addNewNomination();
             myController.text = '';
             _nominationsFocus.unfocus();
           },
@@ -116,6 +117,16 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  static void addNewNomination() {
+    var requestItem = {
+      "name": myController.text,
+      "nominationCount": 0,
+      "requestedAt": DateTime.now()
+    };
+
+    db.collection('requestItem').add(requestItem);
   }
 
   @override
