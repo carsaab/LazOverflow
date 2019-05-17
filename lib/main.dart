@@ -106,8 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
           focusNode: _nominationsFocus,
         ),
         FloatingActionButton(
-          // When the user presses the button, show an alert dialog with the
-          // text the user has typed into our text field.
           onPressed: () {
             debugPrint(myController.text);
             myController.text = '';
