@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:firebase_auth/firebase_auth.dart";
+import 'package:snackingaz/questions_page.dart';
 import "home_page.dart";
 
 class Login extends StatelessWidget {
@@ -78,14 +79,15 @@ class _LoginPageState extends State<LoginPage> {
   void moveToHome() {
     Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage(title: "Snacking A-Z",)));
+        MaterialPageRoute(builder: (context) => QuestionsPage()));
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text("CostGo"),
+          backgroundColor: Colors.black,
+          title: new Text("LAZ Overflow"),
         ),
         body: new Container(
             padding: EdgeInsets.all(10.0),
@@ -127,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: new InputDecoration(
               labelText: "Email",
               fillColor: Colors.white,
-              border: new OutlineInputBorder(borderRadius: new BorderRadius.circular(25.0))),
+              border: new OutlineInputBorder(borderRadius: new BorderRadius.circular(15.0))),
           validator: checkEmail,
           onSaved: saveEmail
       ),
@@ -136,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: new InputDecoration(
               labelText: "Password",
               fillColor: Colors.white,
-              border: new OutlineInputBorder(borderRadius: new BorderRadius.circular(25.0))),
+              border: new OutlineInputBorder(borderRadius: new BorderRadius.circular(15.0))),
           obscureText: true,
           validator: checkPassword,
           onSaved: savePassword

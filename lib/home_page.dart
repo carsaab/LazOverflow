@@ -5,11 +5,12 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Snacking A-Z',
+      title: 'LAZ Overflow',
+      color: Colors.black,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new HomePage(title: 'Snacking A-Z'),
+      home: new HomePage(title: 'LAZ Overflow'),
     );
   }
 }
@@ -31,73 +32,67 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _widgetOptions = <Widget>[
     Expanded(
-        child: StreamBuilder<QuerySnapshot>(
+      child: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection('shoppingItem').snapshots(),
         builder: (context, snapshot) {
-          if(!snapshot.hasData){
+          if (!snapshot.hasData) {
             return const Text('Loading...');
           }
 
-          var voteTotalFromDocument = (document){
+          var voteTotalFromDocument = (document) {
             final upVotes = document['currentUpVotes'] ?? 0;
             final downVotes = document['currentDownVotes'] ?? 0;
             return upVotes - downVotes;
           };
 
-          snapshot.data.documents.sort((documentA, documentB) => voteTotalFromDocument(documentB) - voteTotalFromDocument(documentA));
+          snapshot.data.documents.sort((documentA, documentB) =>
+              voteTotalFromDocument(documentB) -
+              voteTotalFromDocument(documentA));
           final documents = snapshot.data.documents;
 
           return ListView.builder(
-            itemExtent: 80.00,
-            itemCount: documents.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final document = documents[index];
-              final upVotes = document['currentUpVotes'] ?? 0;
-              final downVotes = document['currentDownVotes'] ?? 0;
-              debugPrint(upVotes.toString());
-              debugPrint(downVotes.toString());
-              return Row(
-                children: [ 
+              itemExtent: 80.00,
+              itemCount: documents.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final document = documents[index];
+                final upVotes = document['currentUpVotes'] ?? 0;
+                final downVotes = document['currentDownVotes'] ?? 0;
+                debugPrint(upVotes.toString());
+                debugPrint(downVotes.toString());
+                return Row(children: [
                   IconButton(
                     icon: Icon(Icons.thumb_up),
                     onPressed: () => {
-                      document.reference.updateData({
-                        'currentUpVotes' : FieldValue.increment(1),
-                        'historicalUpVotes' : FieldValue.increment(1)
-                      })
-                    },
-
+                          document.reference.updateData({
+                            'currentUpVotes': FieldValue.increment(1),
+                            'historicalUpVotes': FieldValue.increment(1)
+                          })
+                        },
                   ),
                   IconButton(
                     icon: Icon(Icons.thumb_down),
                     onPressed: () => {
-                      document.reference.updateData({
-                        'currentDownVotes' : FieldValue.increment(1),
-                        'hisotricalDownVotes': FieldValue.increment(1)
-                      })
-                    },
+                          document.reference.updateData({
+                            'currentDownVotes': FieldValue.increment(1),
+                            'hisotricalDownVotes': FieldValue.increment(1)
+                          })
+                        },
                   ),
-                  Text(
-                    voteTotalFromDocument(document).toString()
-                  ),
-                  Text(
-                    document['name'] ?? "no name provided"
-                  ),
-                ]
-              );
-            }
-          );
+                  Text(voteTotalFromDocument(document).toString()),
+                  Text(document['name'] ?? "no name provided"),
+                ]);
+              });
         },
       ),
     ),
-    Column(
+    ListView(
       children: <Widget>[
         FractionallySizedBox(
           child: StreamBuilder<QuerySnapshot>(
             stream: Firestore.instance.collection('requestItem').snapshots(),
             builder: (context, snapshot) {
-              if(!snapshot.hasData){
+              if (!snapshot.hasData) {
                 return const Text('Loading...');
               }
               return ListView.builder(
@@ -108,27 +103,18 @@ class _HomePageState extends State<HomePage> {
                     final document = snapshot.data.documents[index];
                     final upVotes = document['nominationCount'] ?? 0;
                     debugPrint(upVotes.toString());
-                    return Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () => {
-                              document.reference.updateData({
-                                'nominationCount' : FieldValue.increment(1)
-                              })
+                    return Row(children: [
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () => {
+                              document.reference.updateData(
+                                  {'nominationCount': FieldValue.increment(1)})
                             },
-
-                          ),
-                          Text(
-                              (upVotes).toString()
-                          ),
-                          Text(
-                              document['name'] ?? "no name provided"
-                          ),
-                        ]
-                    );
-                  }
-              );
+                      ),
+                      Text((upVotes).toString()),
+                      Text(document['name'] ?? "no name provided"),
+                    ]);
+                  });
             },
           ),
         ),
@@ -179,12 +165,8 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            _widgetOptions.elementAt(_selectedIndex)
-          ]
-        )
-      ),
+          child: Column(
+              children: <Widget>[_widgetOptions.elementAt(_selectedIndex)])),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
